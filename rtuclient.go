@@ -44,6 +44,10 @@ type rtuPackager struct {
 	SlaveId byte
 }
 
+func (mb *rtuPackager) SetSlaveId(slaveid byte){
+	mb.SlaveId = slaveid
+}
+
 // Encode encodes PDU in a RTU frame:
 //  Slave Address   : 1 byte
 //  Function        : 1 byte

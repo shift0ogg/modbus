@@ -55,6 +55,9 @@ type tcpPackager struct {
 	SlaveId byte
 }
 
+func (mb *tcpPackager) SetSlaveId(slaveid byte){
+	mb.SlaveId = slaveid
+}
 // Encode adds modbus application protocol header:
 //  Transaction identifier: 2 bytes
 //  Protocol identifier: 2 bytes
