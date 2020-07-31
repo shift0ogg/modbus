@@ -1,4 +1,4 @@
-module modbus
+module github.com/shift0ogg/modbus
 
 go 1.14
 
