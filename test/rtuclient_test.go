@@ -9,17 +9,17 @@ import (
 	"os"
 	"testing"
 
-	"github.com/goburrow/modbus"
+	"github.com/shift0ogg/modbus"
 )
 
 const (
-	rtuDevice = "/dev/pts/6"
+	rtuDevice = "COM1"
 )
 
 func TestRTUClient(t *testing.T) {
 	// Diagslave does not support broadcast id.
 	handler := modbus.NewRTUClientHandler(rtuDevice)
-	handler.SlaveId = 17
+	handler.SlaveId = 1
 	ClientTestAll(t, modbus.NewClient(handler))
 }
 

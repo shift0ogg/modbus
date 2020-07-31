@@ -1,0 +1,4 @@
+github.com/goburrow/serial v0.1.0 h1:v2T1SQa/dlUqQiYIT8+Cu7YolfqAi3K96UmhwYyuSrA=
+github.com/goburrow/serial v0.1.0/go.mod h1:sAiqG0nRVswsm1C97xsttiYCzSLBmUZ/VSlVLZJ8haA=
+github.com/shift0ogg/modbus v0.1.2 h1:tiXATE4w6iCElIY116Pvt/YptAqM25CriADYWZU5YEA=
+github.com/shift0ogg/modbus v0.1.2/go.mod h1:vO1yzL5YEOZpm5aZmADVG4GvkimA4FtXExgvNRemy7M=
