@@ -47,6 +47,5 @@ type Client interface {
 	// of register in a remote device and returns FIFO value register.
 	ReadFIFOQueue(address uint16) (results []byte, err error)
 	Close() error
-	SetSlaveId(slaveid byte)
-
+	SetSlaveID(slaveid byte)
 }

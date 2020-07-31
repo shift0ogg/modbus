@@ -44,7 +44,7 @@ type rtuPackager struct {
 	SlaveId byte
 }
 
-func (mb *rtuPackager) SetSlaveId(slaveid byte){
+func (mb *rtuPackager) SetSlaveId(slaveid byte) {
 	mb.SlaveId = slaveid
 }
 
@@ -167,6 +167,14 @@ func (mb *rtuSerialTransporter) Send(aduRequest []byte) (aduResponse []byte, err
 	aduResponse = data[:n]
 	mb.serialPort.logf("modbus: received % x\n", aduResponse)
 	return
+}
+
+// Close closes current connection.
+func (mb *rtuSerialTransporter) Close() error {
+	mb.mu.Lock()
+	defer mb.mu.Unlock()
+
+	return mb.close()
 }
 
 // calculateDelay roughly calculates time needed for the next frame.

@@ -432,6 +432,16 @@ func (mb *client) ReadFIFOQueue(address uint16) (results []byte, err error) {
 	return
 }
 
+//SetSlaveId ---
+func (mb *client) SetSlaveID(slaveid byte) {
+	mb.packager.SetSlaveId(slaveid)
+}
+
+// Close closes current connection.
+func (mb *client) Close() error {
+	return mb.transporter.Close()
+}
+
 // Helpers
 
 // send sends request and checks possible exception in the response.

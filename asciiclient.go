@@ -46,6 +46,10 @@ type asciiPackager struct {
 	SlaveId byte
 }
 
+func (mb *asciiPackager) SetSlaveId(slaveid byte) {
+	mb.SlaveId = slaveid
+}
+
 // Encode encodes PDU in a ASCII frame:
 //  Start           : 1 char
 //  Address         : 2 chars
@@ -214,6 +218,14 @@ func writeHex(buf *bytes.Buffer, value []byte) (err error) {
 		}
 	}
 	return
+}
+
+// Close closes current connection.
+func (mb *asciiSerialTransporter) Close() error {
+	mb.mu.Lock()
+	defer mb.mu.Unlock()
+
+	return mb.close()
 }
 
 // readHex decodes hexa string to byte, e.g. "8C" => 0x8C.

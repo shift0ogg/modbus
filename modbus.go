@@ -85,6 +85,7 @@ type Packager interface {
 	Encode(pdu *ProtocolDataUnit) (adu []byte, err error)
 	Decode(adu []byte) (pdu *ProtocolDataUnit, err error)
 	Verify(aduRequest []byte, aduResponse []byte) (err error)
+	SetSlaveId(slaveid byte)
 }
 
 // Transporter specifies the transport layer.
