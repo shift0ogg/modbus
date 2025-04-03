@@ -49,10 +49,11 @@ func (mb *rtuPackager) SetSlaveId(slaveid byte) {
 }
 
 // Encode encodes PDU in a RTU frame:
-//  Slave Address   : 1 byte
-//  Function        : 1 byte
-//  Data            : 0 up to 252 bytes
-//  CRC             : 2 byte
+//
+//	Slave Address   : 1 byte
+//	Function        : 1 byte
+//	Data            : 0 up to 252 bytes
+//	CRC             : 2 byte
 func (mb *rtuPackager) Encode(pdu *ProtocolDataUnit) (adu []byte, err error) {
 	length := len(pdu.Data) + 4
 	if length > rtuMaxSize {
@@ -129,6 +130,7 @@ func (mb *rtuSerialTransporter) Send(aduRequest []byte) (aduResponse []byte, err
 		return
 	}
 	function := aduRequest[1]
+	salveid := aduRequest[0]
 	functionFail := aduRequest[1] & 0x80
 	bytesToRead := calculateResponseLength(aduRequest)
 	time.Sleep(mb.calculateDelay(len(aduRequest) + bytesToRead))
@@ -136,12 +138,29 @@ func (mb *rtuSerialTransporter) Send(aduRequest []byte) (aduResponse []byte, err
 	var n int
 	var n1 int
 	var data [rtuMaxSize]byte
+
+	//判断头要符合才继续读取
+	for {
+		n, err = io.ReadAtLeast(mb.port, data[:2], 2)
+		if err != nil {
+			return
+		}
+		if salveid == data[0] && (data[1] == function || data[1] == functionFail) { //	一直读取到 slaveid 和 function 符合为止
+			break
+		}
+	}
+
 	//We first read the minimum length and then read either the full package
 	//or the error package, depending on the error status (byte 2 of the response)
-	n, err = io.ReadAtLeast(mb.port, data[:], rtuMinSize)
+	n, err = io.ReadAtLeast(mb.port, data[2:], rtuMinSize-2)
 	if err != nil {
 		return
 	}
+
+	n += 2
+
+	//fmt.Println("---:", data[:n+2])
+
 	//if the function is correct
 	if data[1] == function {
 		//we read the rest of the bytes
@@ -165,6 +184,9 @@ func (mb *rtuSerialTransporter) Send(aduRequest []byte) (aduResponse []byte, err
 		return
 	}
 	aduResponse = data[:n]
+
+	//fmt.Println("aduResponse : ", aduResponse)
+
 	mb.serialPort.logf("modbus: received % x\n", aduResponse)
 	return
 }
